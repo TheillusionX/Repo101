@@ -1,0 +1,12 @@
+Activity,Immediate Predecessor(s),Time
+A,,5
+B,,9
+C,A-B,3
+D,C,12
+E,C,6
+F,E,5
+G,E-F,8
+H,C,7
+I,D-H,4
+J,F-G-I,5
+K,J,4
