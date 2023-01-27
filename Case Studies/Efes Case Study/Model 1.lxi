@@ -1,0 +1,28 @@
+B 3 C o m p i l a t i o n
+B 72 Include File Summary
+B 84 E x e c u t i o n
+I 84 t_m
+I 94 C_m
+I 99 t_b
+I 107 C_b
+I 112 D
+B 120 Equation Listing    SOLVE TRANSPORTATION_MODEL Using LP From line 61
+D 123 objective
+D 128 supply
+D 137 brewery_capacity
+D 144 yield_of_malt
+D 151 demand
+B 163 Column Listing      SOLVE TRANSPORTATION_MODEL Using LP From line 61
+E 166 z
+E 173 m
+E 195 b
+B 220 Model Statistics    SOLVE TRANSPORTATION_MODEL Using LP From line 61
+B 233 Solution Report     SOLVE TRANSPORTATION_MODEL Using LP From line 61
+F 266 objective
+F 268 supply
+F 276 brewery_capacity
+F 283 yield_of_malt
+F 290 demand
+G 303 z
+G 307 m
+G 318 b

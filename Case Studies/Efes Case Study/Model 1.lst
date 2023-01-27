@@ -1,0 +1,351 @@
+GAMS 37.1.0  r07954d5 Released Nov 11, 2021 WEX-WEI x86 64bit/MS Windows - 07/03/22 14:56:51 Page 1
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+   1  sets
+   2  i /"Afyon", "Konya", "Import (Izmir)"/ set of malt plant i
+   3  j /"Istanbul", "Ankara"/ set of brewer j
+   4  k /"Istanbul", "Izmir", "Antalya", "Bursa", "Kayseri", "Export (Izmir)"/ set of distribution center k
+   5   
+   6  parameters
+   7  t_m(i, j) cost of shipping malt (in million $ per 1000 tons) from malt plant i to brewery j
+   8  C_m(i) capacity of malt plant i (in thousand tons per year)
+   9   
+  10  t_b(j, k) cost of shipping beer (in million $ per million liters) from brewery j to distribution center k
+  11  C_b(j) capacity of brewery j (in million liters per year)
+  12   
+  13  D(k) demand of distribution center k (in million liters per year)
+  14  ;
+  15   
+  16  Scalar
+  17  Y_d /8.333/ Scalar yield of beer (in million liters) from 1000 tons of domestic malt
+  18  Y_i /9.091/ Scalar yield of beer (in million liters) from 1000 tons of imported malt
+  19  ;
+  20   
+  21  *$CALL GDXXRW "D:\METU\METU 4th Semester\IE252\Homework\Case Study 2\IE252 Case Study 2 Parameters.xls" output = "Params.gdx" par=t_m rng=data!B7 cDim=1 rDim=1 par=C_m rng=data!K5 cDim=0 rDim=1 par=t_b rng=data!B16:H18 par=C_b rng=data!P6 cDim=0 rDim=1 par=D rng=data!K24 cDim=0 rDim=1
+GDXIN   D:\METU\METU 4th Semester\IE252\Homework\Case Study 2\Params.gdx
+  23   
+--- LOAD  D = 5:D
+--- LOAD  t_m = 1:t_m
+--- LOAD  C_m = 2:C_m
+--- LOAD  t_b = 3:t_b
+--- LOAD  C_b = 4:C_b
+  26   
+  27  display t_m, C_m, t_b, C_b, D;
+  28   
+  29  variable
+  30  z objective function
+  31  ;
+  32   
+  33  nonnegative variables
+  34  m(i, j) tons (in thousands) of malt transported from malt plant i to brewery j
+  35  b(j, k) liters (in millions) of beer transported from brewery j to distribution center k
+  36  ;
+  37   
+  38  equations
+  39  objective
+  40  supply
+  41  brewery_capacity
+  42  yield_of_malt
+  43  demand
+  44  ;
+  45   
+  46  objective.. z =e= sum((i,j), t_m(i, j) * m(i, j)) +
+  47                      sum((j, k), t_b(j,k) * b(j, k));
+  48   
+  49  supply(i).. sum(j, m(i, j)) =l= C_m(i);
+  50   
+  51  brewery_capacity(j).. sum(k, b(j, k)) =l= C_b(j);
+  52  *brewery_capacity(j).. sum(i, m(i, j)) =l= C_b(j);
+  53   
+  54  yield_of_malt(j).. Y_d * sum((i)$(ord(i) < 3), m(i, j)) +
+  55                      Y_i * m("Import (Izmir)", j) =e= sum(k, b(j, k));
+  56   
+  57  demand(k).. sum(j, b(j, k)) =g= D(k);
+  58   
+  59  model TRANSPORTATION_MODEL /all/;
+  60   
+  61  solve TRANSPORTATION_MODEL using LP minimizing z;
+GAMS 37.1.0  r07954d5 Released Nov 11, 2021 WEX-WEI x86 64bit/MS Windows - 07/03/22 14:56:51 Page 2
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Include File Summary
+
+
+   SEQ   GLOBAL TYPE      PARENT   LOCAL  FILENAME
+
+     1        1 INPUT          0       0  D:\METU\METU 4th Semester\IE252\Homework\Case Study 2\Model 1.gms
+     2       22 GDXIN          1      22  D:\METU\METU 4th Semester\IE252\Homework\Case Study 2\Params.gdx
+
+
+COMPILATION TIME     =        0.000 SECONDS      3 MB  37.1.0 r07954d5 WEX-WEI
+GAMS 37.1.0  r07954d5 Released Nov 11, 2021 WEX-WEI x86 64bit/MS Windows - 07/03/22 14:56:51 Page 3
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+E x e c u t i o n
+
+
+----     27 PARAMETER t_m  cost of shipping malt (in million $ per 1000 tons) from malt plant i to brewery j
+
+                  Istanbul      Ankara
+
+Afyon                0.026       0.017
+Konya                0.037       0.017
+Import (Izmir)       0.032       0.033
+
+
+----     27 PARAMETER C_m  capacity of malt plant i (in thousand tons per year)
+
+Afyon          30.000,    Konya          68.000,    Import (Izmir) 20.000
+
+
+----     27 PARAMETER t_b  cost of shipping beer (in million $ per million liters) from brewery j to distribution center k
+
+            Istanbul       Izmir     Antalya       Bursa     Kayseri  Export (I~
+
+Istanbul                   0.040       0.052       0.017       0.055       0.042
+Ankara         0.032       0.041       0.039       0.027       0.023       0.043
+
+
+----     27 PARAMETER C_b  capacity of brewery j (in million liters per year)
+
+Istanbul 220.000,    Ankara   200.000
+
+
+----     27 PARAMETER D  demand of distribution center k (in million liters per year)
+
+Istanbul       103.000,    Izmir           74.000,    Antalya         50.000,    Bursa           60.000,    Kayseri        102.000,    Export (Izmir)  13.000
+
+GAMS 37.1.0  r07954d5 Released Nov 11, 2021 WEX-WEI x86 64bit/MS Windows - 07/03/22 14:56:51 Page 4
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Equation Listing    SOLVE TRANSPORTATION_MODEL Using LP From line 61
+
+
+---- objective  =E=  
+
+objective..  z - 0.0264374*m(Afyon,Istanbul) - 0.0166864*m(Afyon,Ankara) - 0.0368254*m(Konya,Istanbul) - 0.0167354*m(Konya,Ankara) - 0.0317784*m(Import (Izmir),Istanbul) - 0.0325134*m(Import (Izmir),Ankara) - 0.0403571428571429*b(Istanbul,Izmir) - 0.0517142857142857*b(Istanbul,Antalya) - 0.0173571428571429*b(Istanbul,Bursa) - 0.0551428571428571*b(Istanbul,Kayseri) - 0.0418571428571429*b(Istanbul,Export (Izmir)) - 0.0323571428571429*b(Ankara,Istanbul) - 0.0414285714285714*b(Ankara,Izmir) - 0.0389285714285714*b(Ankara,Antalya) - 0.0272857142857143*b(Ankara,Bursa) - 0.0227857142857143*b(Ankara,Kayseri) - 0.0429285714285714*b(Ankara,Export (Izmir)) =E= 0 ; (LHS = 0)
+     
+
+---- supply  =L=  
+
+supply(Afyon)..  m(Afyon,Istanbul) + m(Afyon,Ankara) =L= 30 ; (LHS = 0)
+     
+supply(Konya)..  m(Konya,Istanbul) + m(Konya,Ankara) =L= 68 ; (LHS = 0)
+     
+supply(Import (Izmir))..  m(Import (Izmir),Istanbul) + m(Import (Izmir),Ankara) =L= 20 ; (LHS = 0)
+     
+
+---- brewery_capacity  =L=  
+
+brewery_capacity(Istanbul)..  b(Istanbul,Istanbul) + b(Istanbul,Izmir) + b(Istanbul,Antalya) + b(Istanbul,Bursa) + b(Istanbul,Kayseri) + b(Istanbul,Export (Izmir)) =L= 220 ; (LHS = 0)
+     
+brewery_capacity(Ankara)..  b(Ankara,Istanbul) + b(Ankara,Izmir) + b(Ankara,Antalya) + b(Ankara,Bursa) + b(Ankara,Kayseri) + b(Ankara,Export (Izmir)) =L= 200 ; (LHS = 0)
+     
+
+---- yield_of_malt  =E=  
+
+yield_of_malt(Istanbul)..  8.333*m(Afyon,Istanbul) + 8.333*m(Konya,Istanbul) + 9.091*m(Import (Izmir),Istanbul) - b(Istanbul,Istanbul) - b(Istanbul,Izmir) - b(Istanbul,Antalya) - b(Istanbul,Bursa) - b(Istanbul,Kayseri) - b(Istanbul,Export (Izmir)) =E= 0 ; (LHS = 0)
+     
+yield_of_malt(Ankara)..  8.333*m(Afyon,Ankara) + 8.333*m(Konya,Ankara) + 9.091*m(Import (Izmir),Ankara) - b(Ankara,Istanbul) - b(Ankara,Izmir) - b(Ankara,Antalya) - b(Ankara,Bursa) - b(Ankara,Kayseri) - b(Ankara,Export (Izmir)) =E= 0 ; (LHS = 0)
+     
+
+---- demand  =G=  
+
+demand(Istanbul)..  b(Istanbul,Istanbul) + b(Ankara,Istanbul) =G= 103 ; (LHS = 0, INFES = 103 ****)
+     
+demand(Izmir)..  b(Istanbul,Izmir) + b(Ankara,Izmir) =G= 74 ; (LHS = 0, INFES = 74 ****)
+     
+demand(Antalya)..  b(Istanbul,Antalya) + b(Ankara,Antalya) =G= 50 ; (LHS = 0, INFES = 50 ****)
+     
+REMAINING 3 ENTRIES SKIPPED
+
+GAMS 37.1.0  r07954d5 Released Nov 11, 2021 WEX-WEI x86 64bit/MS Windows - 07/03/22 14:56:51 Page 5
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Column Listing      SOLVE TRANSPORTATION_MODEL Using LP From line 61
+
+
+---- z  objective function
+
+z
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+        1       objective
+
+
+---- m  tons (in thousands) of malt transported from malt plant i to brewery j
+
+m(Afyon,Istanbul)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       -0.0264  objective
+        1       supply(Afyon)
+        8.333   yield_of_malt(Istanbul)
+
+m(Afyon,Ankara)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       -0.0167  objective
+        1       supply(Afyon)
+        8.333   yield_of_malt(Ankara)
+
+m(Konya,Istanbul)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       -0.0368  objective
+        1       supply(Konya)
+        8.333   yield_of_malt(Istanbul)
+
+REMAINING 3 ENTRIES SKIPPED
+
+---- b  liters (in millions) of beer transported from brewery j to distribution center k
+
+b(Istanbul,Istanbul)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+        1       brewery_capacity(Istanbul)
+       -1       yield_of_malt(Istanbul)
+        1       demand(Istanbul)
+
+b(Istanbul,Izmir)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       -0.0404  objective
+        1       brewery_capacity(Istanbul)
+       -1       yield_of_malt(Istanbul)
+        1       demand(Izmir)
+
+b(Istanbul,Antalya)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       -0.0517  objective
+        1       brewery_capacity(Istanbul)
+       -1       yield_of_malt(Istanbul)
+        1       demand(Antalya)
+
+REMAINING 9 ENTRIES SKIPPED
+GAMS 37.1.0  r07954d5 Released Nov 11, 2021 WEX-WEI x86 64bit/MS Windows - 07/03/22 14:56:51 Page 6
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Model Statistics    SOLVE TRANSPORTATION_MODEL Using LP From line 61
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS           5     SINGLE EQUATIONS           14
+BLOCKS OF VARIABLES           3     SINGLE VARIABLES           19
+NON ZERO ELEMENTS            66
+
+
+GENERATION TIME      =        0.016 SECONDS      4 MB  37.1.0 r07954d5 WEX-WEI
+GAMS 37.1.0  r07954d5 Released Nov 11, 2021 WEX-WEI x86 64bit/MS Windows - 07/03/22 14:56:51 Page 7
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Solution Report     SOLVE TRANSPORTATION_MODEL Using LP From line 61
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   TRANSPORTATION_MODEL   OBJECTIVE  z
+     TYPE    LP                     DIRECTION  MINIMIZE
+     SOLVER  CPLEX                  FROM LINE  61
+
+**** SOLVER STATUS     1 Normal Completion
+**** MODEL STATUS      1 Optimal
+**** OBJECTIVE VALUE                9.9363
+
+ RESOURCE USAGE, LIMIT          0.016 10000000000.000
+ ITERATION COUNT, LIMIT        10    2147483647
+--- *** This solver runs with a demo license. No commercial use.
+--- GMO setup time: 0.00s
+--- GMO memory 0.50 Mb (peak 0.50 Mb)
+--- Dictionary memory 0.00 Mb
+--- Cplex 20.1.0.1 link memory 0.00 Mb (peak 0.00 Mb)
+--- Starting Cplex
+
+
+--- LP status (1): optimal.
+--- Cplex Time: 0.00sec (det. 0.03 ticks)
+
+
+Optimal solution found
+Objective:            9.936252
+
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- EQU objective           .              .              .             1.0000      
+
+---- EQU supply  
+
+                      LOWER          LEVEL          UPPER         MARGINAL
+
+Afyon                 -INF           30.0000        30.0000   -4.900000E-5      
+Konya                 -INF           18.2419        68.0000          .          
+Import (Izmir)        -INF             .            20.0000          .          
+
+---- EQU brewery_capacity  
+
+                LOWER          LEVEL          UPPER         MARGINAL
+
+Istanbul        -INF          202.0000       220.0000          .          
+Ankara          -INF          200.0000       200.0000   -9.873824E-5      
+
+---- EQU yield_of_malt  
+
+                LOWER          LEVEL          UPPER         MARGINAL
+
+Istanbul          .              .              .             0.0032      
+Ankara            .              .              .             0.0020      
+
+---- EQU demand  
+
+                      LOWER          LEVEL          UPPER         MARGINAL
+
+Istanbul             103.0000       103.0000        +INF            0.0032      
+Izmir                 74.0000        74.0000        +INF            0.0435      
+Antalya               50.0000        50.0000        +INF            0.0410      
+Bursa                 60.0000        60.0000        +INF            0.0205      
+Kayseri              102.0000       102.0000        +INF            0.0249      
+Export (Izmir)        13.0000        13.0000        +INF            0.0450      
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- VAR z                 -INF            9.9363        +INF             .          
+
+  z  objective function
+
+---- VAR m  tons (in thousands) of malt transported from malt plant i to brewery j
+
+                               LOWER          LEVEL          UPPER         MARGINAL
+
+Afyon         .Istanbul          .            24.2410        +INF             .          
+Afyon         .Ankara            .             5.7590        +INF             .          
+Konya         .Istanbul          .              .            +INF            0.0103      
+Konya         .Ankara            .            18.2419        +INF             .          
+Import (Izmir).Istanbul          .              .            +INF            0.0029      
+Import (Izmir).Ankara            .              .            +INF            0.0143      
+
+---- VAR b  liters (in millions) of beer transported from brewery j to distribution center k
+
+                               LOWER          LEVEL          UPPER         MARGINAL
+
+Istanbul.Istanbul                .           103.0000        +INF             .          
+Istanbul.Izmir                   .            26.0000        +INF             .          
+Istanbul.Antalya                 .              .            +INF            0.0139      
+Istanbul.Bursa                   .            60.0000        +INF             .          
+Istanbul.Kayseri                 .              .            +INF            0.0334      
+Istanbul.Export (Izmir)          .            13.0000        +INF             .          
+Ankara  .Istanbul                .              .            +INF            0.0313      
+Ankara  .Izmir                   .            48.0000        +INF             .          
+Ankara  .Antalya                 .            50.0000        +INF             .          
+Ankara  .Bursa                   .              .            +INF            0.0089      
+Ankara  .Kayseri                 .           102.0000        +INF             .          
+Ankara  .Export (Izmir)          .              .            +INF            EPS         
+
+
+**** REPORT SUMMARY :        0     NONOPT
+                             0 INFEASIBLE
+                             0  UNBOUNDED
+
+
+EXECUTION TIME       =        0.188 SECONDS      4 MB  37.1.0 r07954d5 WEX-WEI
+
+
+USER: GAMS Demo license for Youssef Nsouli           G220122|0002CO-GEN
+      Middle East Technical University, Turkey                 DL058350
+
+
+**** FILE SUMMARY
+
+Input      D:\METU\METU 4th Semester\IE252\Homework\Case Study 2\Model 1.gms
+Output     D:\METU\METU 4th Semester\IE252\Homework\Case Study 2\Model 1.lst

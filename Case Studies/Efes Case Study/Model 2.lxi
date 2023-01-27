@@ -1,0 +1,52 @@
+B 3 C o m p i l a t i o n
+B 126 Include File Summary
+B 138 E x e c u t i o n
+I 138 t_m
+I 148 C_m
+I 153 t_b
+I 164 C_b
+I 169 N_b
+I 174 E_b
+I 179 D
+I 191 CN_Nom
+I 196 CE_Nom
+I 201 CN
+I 210 CE
+B 222 Equation Listing    SOLVE transshipopenment Using MIP From line 104
+D 225 objective
+D 232 supply
+D 243 brewery_capacity
+D 254 malt_yield
+D 265 only_open_once
+D 276 only_expand_opened_site
+D 287 only_expand_once
+D 298 demand
+D 309 old_breweries_are_built
+D 320 old_breweries_dont_expand
+D 331 dont_open_after_three_years
+D 342 dont_expand_after_three_years
+B 354 Column Listing      SOLVE transshipopenment Using MIP From line 104
+E 357 m
+E 379 b
+E 401 o
+E 477 e
+E 499 z
+B 507 Model Statistics    SOLVE transshipopenment Using MIP From line 104
+B 520 Solution Report     SOLVE transshipopenment Using MIP From line 104
+F 566 objective
+F 568 supply
+F 633 brewery_capacity
+F 738 malt_yield
+F 843 only_open_once
+F 853 only_expand_opened_site
+F 958 only_expand_once
+F 968 demand
+F 1093 old_breweries_are_built
+F 1138 old_breweries_dont_expand
+F 1183 dont_open_after_three_years
+F 1273 dont_expand_after_three_years
+G 1363 m
+G 1668 b
+G 2273 o
+G 2378 e
+G 2485 z
