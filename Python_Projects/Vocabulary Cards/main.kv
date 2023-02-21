@@ -1,0 +1,178 @@
+<MainButton>:
+    font_size: 12
+<MainLabel>:
+    font_size: 12
+    text_size: root.width, None
+    halign: 'center'
+<ScrollButton>
+    halign: 'left'
+<Blank>:
+    GridLayout:
+
+<MainMenu>:
+    GridLayout:
+        rows: 3
+        cols: 1
+        padding: [40, 120]
+        spacing: [0, 10]
+
+        MainButton:
+            text: "Setting"
+            on_release: root.go_to("setting")
+        MainButton:
+            text: "Vocabulary Cards"
+            on_release: root.go_to("voc_cards")
+        MainButton:
+            text: "Edit words"
+            on_release: root.go_to("editor")
+
+<Setting>:
+    GridLayout:
+        cols: 1
+        GridLayout:
+            cols: 3
+            size_hint: [0.4, 0.2]
+            MainButton:
+                text: "Return"
+                on_release: root.go_to("main_menu")
+            Label:
+            Label:
+        GridLayout:
+            cols: 1
+            padding: [40, 100]
+            spacing: 10
+            GridLayout:
+                cols: 2
+                size_hint: [1, 0.3]
+                MainLabel:
+                    text: "Font Size:"
+                TextInput:
+                    hint_text: "Enter font size"
+                    halign: 'center'
+                    id: font_input
+            MainLabel:
+                id: warning
+            GridLayout:
+                cols: 3
+                size_hint: [1, 0.2]
+                Label:
+                MainButton:
+                    text: "Apply"
+                    size_hint: [2, 1]
+                    on_release: root.apply()
+                Label:
+
+
+<VocCards>
+    GridLayout:
+        cols: 1
+        padding: '5px'
+        spacing: '5px'
+        GridLayout:
+            cols: 3
+            size_hint: [1, 0.2]
+            MainButton:
+                on_release: root.go_to("main_menu")
+                text: "Return"
+            Label:
+            Label:
+
+        MainLabel:
+            text: "Translate the following word to Turkish:"
+            font_size: 20
+
+        GridLayout:
+            cols: 2
+            padding: ['20px', 0]
+            size_hint: [1, 0.8]
+            MainLabel:
+                id: English
+            TextInput:
+                id: Turkish
+
+        MainLabel:
+            size_hint: [1, 0.8]
+            id: right_or_wrong
+
+        GridLayout:
+            cols: 3
+            Label:
+            MainButton:
+                size_hint: [2, 1]
+                text: "Answer!"
+                on_release: root.answer()
+            Label:
+
+        Label:
+            size_hint: [1, 0.8]
+
+<Editor>
+    GridLayout:
+        cols: 1
+        padding: '10px'
+        spacing: '10px'
+
+        GridLayout:
+            cols: 3
+            size_hint: [1, 0.2]
+            MainButton:
+                text: "Return"
+                on_release: root.go_to("main_menu")
+            Label:
+            Label:
+
+        ScrollView:
+            do_scroll_x: True
+            do_scroll_y: True
+            size_hint: [1, 1.5]
+
+            GridLayout:
+                cols: 3
+                spacing: '5px'
+                id: grid
+                size_hint_y: None
+                height: self.minimum_height
+
+        GridLayout:
+            cols: 3
+            spacing: '5px'
+            MainLabel:
+                id: old_English
+            MainLabel:
+                id: old_Turkish
+            MainButton:
+                text: "Reset"
+                on_release: root.reset()
+
+            MainTextInput:
+                id: English
+                hint_text: "English Word"
+            MainTextInput:
+                id: Turkish
+                hint_text: "Turkish Word"
+            GridLayout:
+                cols: 1
+                spacing: '5px'
+                MainButton:
+                    text: "Add"
+                    on_release: root.add()
+                MainButton:
+                    text: "Edit"
+                    on_release: root.edit()
+                MainButton:
+                    text: "Delete"
+                    on_release: root.delete()
+
+
+
+<RootWidget>:
+    Blank:
+        name: "blank"
+    MainMenu:
+        name: "main_menu"
+    Setting:
+        name: "setting"
+    VocCards:
+        name: "voc_cards"
+    Editor:
+        name: "editor"

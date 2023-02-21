@@ -1,0 +1,159 @@
+#:import hex kivy.utils.get_color_from_hex
+#:import Window kivy.core.window
+<Label>:
+    text_size: root.width, None
+    font_name: 'Arial'
+    halign: 'center'
+
+<Button>:
+    background_color: '#00fff7' if self.state == "normal" else '#034d4a'
+    canvas.before:
+        Color:
+            rgba: [0, 0, 0, 1] if self.state == "normal" else hex('#00fff7')
+        Rectangle:
+            pos: self.pos
+            size: [self.size[0], self.size[1]+1]
+
+<LoginScreen>:
+    FloatLayout:
+        GridLayout:
+            size_hint: [1,1]
+            canvas.before:
+                Color:
+                    rgba: hex('#1f2f30')
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            cols: 1
+            padding: [10, 10]
+            spacing: [10, 10]
+
+            GridLayout:
+                cols: 1
+                rows: 1
+                size_hint: [1, .1]
+                Label:
+                    text: "Enter Employee ID and Branch ID:"
+                    font_size: 30
+                    bold: True
+
+            GridLayout:
+                spacing: [10, 10]
+                cols: 2
+                rows: 1
+                size_hint: [1, .05]
+
+                TextInput:
+                    id: employee_id
+                    hint_text: "Enter Employee ID here:"
+                    halign: "center"
+
+                Spinner:
+                    id: branch_id
+                    text: "Enter Branch ID"
+                    values: app.branch_ids
+                    on_text:
+                        root.branch_select(root.ids.branch_id.text)
+
+            GridLayout:
+                cols: 2
+                rows: 1
+                size_hint_y: 0.05
+
+                Button:
+                    text: "View Employee Information"
+                    on_press: root.employee_select(root.ids.employee_id.text)
+
+                Label:
+                    text: ""
+
+            GridLayout:
+                cols: 2
+                size_hint_y: 0.1
+
+                Label:
+                    id: employee_info
+                    text: ""
+
+                Label:
+                    id: branch_info
+                    text: ""
+
+            GridLayout:
+                spacing: 2
+                cols: 2
+                size_hint_y: 0.1
+                margin: 20
+
+                GridLayout:
+                    cols: 1
+                    rows: 2
+
+                    Label:
+                        text: "Select Temperature:"
+                        text: "Select Temperature:"
+
+                    Label:
+                        id: temp
+                        text: "Low"
+                        color: [0, 0, 1, 1]
+                        canvas.before:
+                            Color:
+                                rgba: 1, 1, 1, 1
+                            RoundedRectangle:
+                                pos: self.pos
+                                size: self.size
+                                radius: [10] * 4
+
+                GridLayout:
+                    spacing: 2
+                    cols: 1
+                    rows: 2
+
+                    Button:
+                        id: "temp_up"
+                        text: "^"
+                        on_press: root.temp_up(root.ids.temp.text)
+
+                    Button:
+                        id: "temp_down"
+                        text: "v"
+                        on_press: root.temp_down(root.ids.temp.text)
+            GridLayout:
+                cols: 1
+                size_hint_y :  0.02
+
+                Label:
+                    id: success_or_error
+                    color: [1, 0, 0, 1]
+                    text: ""
+                    bold: True
+                    italic: True
+
+            GridLayout:
+                canvas.before:
+                    Color:
+                        rgba: hex('#00ffff')
+                    RoundedRectangle:
+                        pos: [root.ids.grid1.pos[0]-10, root.ids.grid1.pos[1]-10]
+                        size: [Window.Window.size[0], root.ids.grid1.size[1]*1.3]
+                        radius: [20] * 4
+
+                id: grid1
+                cols: 3
+                rows: 1
+                size_hint: [1, .05]
+                Label:
+                    text: ""
+                Button:
+                    text: "Continue"
+                    on_press: root.submit(root.ids.employee_id.text, root.ids.branch_id.text, root.ids.temp.text)
+                    font_size: 24
+
+                Label:
+                    text: ""
+
+
+<RootWidget>:
+    LoginScreen:
+        name: "login_screen"
