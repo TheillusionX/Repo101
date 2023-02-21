@@ -1,0 +1,192 @@
+<RoomButton>
+    size_hint: [0.1, 0.08]
+
+<FloorButton>
+    color: 'black'
+    background_color: [0] * 4
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'WdBg/round_rect.jpg'
+
+<Blank>
+
+<Map>
+    GridLayout:
+        cols: 1
+
+        GridLayout:
+            rows: 1
+            size_hint: [1, 0.1]
+            canvas.before:
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+                    source: "WdBg/white_bg_blck_stripe_down.jpg"
+            Mlabel:
+                id: time
+                color: 'black'
+                size_hint: [0.35, 1]
+            Label:
+                size_hint: [0.7, 1]
+            Mlabel:
+                text: "<HOSPITAL NAME> Map"
+                color: 'black'
+            Label:
+                size_hint: [0.75, 1]
+            Mbutton:
+                size_hint: [0.25, 1]
+
+        FloatLayout:
+            GridLayout:
+                cols: 2
+                pos_hint: {'x' : 0, 'y' : 0}
+                size_hint: [1,1]
+                canvas.before:
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+                        source: "WdBg/hosp_map.jpg"
+
+                GridLayout:
+                    cols: 1
+                    size_hint: [0.8, 1]
+                    padding: [3, 150, 3, 150]
+                    spacing: 3
+                    FloorButton:
+                        text: "First Floor"
+                    FloorButton:
+                        text: "Second Floor"
+                    FloorButton:
+                        text: "Third Floor"
+
+                Label:
+                    size_hint: [6, 1]
+            RoomButton:
+                id: A2
+                pos_hint: {'x' : 0.31, 'y' : 0.4}
+
+            RoomButton:
+                id: A3
+                pos_hint: {'x' : 0.56, 'y' : 0.35}
+
+            RoomButton:
+                id: A1
+                pos_hint: {'x' : 0.8, 'y' : 0.82}
+
+        GridLayout:
+            rows: 1
+            size_hint: [1, 0.1]
+            padding: [0, 3, 0, 0]
+            spacing: '2px'
+            canvas.before:
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+                    source: "WdBg/white_bg_blck_stripe_up.jpg"
+            Label:
+            Mbutton:
+                size_hint: [0.5, 0.9]
+                on_release:
+                    root.manager.transition.direction = 'right'
+                    root.manager.current = 'plot'
+            Mbutton:
+                size_hint: [0.5, 0.9]
+            Label:
+
+        Label:
+            size_hint: [0, 0]
+
+<Plot>
+    GridLayout:
+        cols: 1
+
+        GridLayout:
+            rows: 1
+            size_hint: [1, 0.1]
+            canvas.before:
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+                    source: "WdBg/white_bg_blck_stripe_down.jpg"
+            Mlabel:
+                id: time
+                color: 'black'
+                size_hint: [0.35, 1]
+            Label:
+                size_hint: [0.7, 1]
+            Mlabel:
+                text: "Plotter "
+                color: 'black'
+            Label:
+                size_hint: [0.75, 1]
+            Mbutton:
+                size_hint: [0.25, 1]
+
+        GridLayout:
+            cols: 2
+            canvas.before:
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+                    source: "WdBg/white.jpg"
+            GridLayout:
+                size_hint: [1.5, 1]
+                padding: [30, 30, 0, 30]
+                cols: 1
+
+                Image:
+                    size_hint: [1, 4]
+                    allow_stretch: True
+                    keep_ratio: False
+                    id: plot
+                    pos: self.pos
+                    size: self.size
+                    center: self.center
+                    source: "Plot/plot.png"
+
+                GridLayout:
+                    rows: 1
+                    padding: 10
+                    spacing: 5
+                    Mbutton:
+                    Mbutton:
+                    Mbutton:
+            GridLayout:
+                cols: 1
+                padding: [0, 30, 30, 30 ]
+                spacing: 5
+                Mbutton:
+                Mbutton:
+                Mbutton:
+        GridLayout:
+            rows: 1
+            size_hint: [1, 0.1]
+            padding: [0, 3, 0, 0]
+            spacing: '2px'
+            canvas.before:
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+                    source: "WdBg/white_bg_blck_stripe_up.jpg"
+            Label:
+            Mbutton:
+                size_hint: [0.5, 0.9]
+            Mbutton:
+                size_hint: [0.5, 0.9]
+                on_release:
+                    root.manager.transition.direction = 'left'
+                    root.manager.current = 'map'
+            Label:
+
+        Label:
+            size_hint: [0, 0]
+
+<RootWidget>:
+    Blank:
+        name: "blank"
+    Map:
+        name: "map"
+    Plot:
+        name: "plot"
