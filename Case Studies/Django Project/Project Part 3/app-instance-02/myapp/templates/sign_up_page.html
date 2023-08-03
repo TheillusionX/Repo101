@@ -1,0 +1,34 @@
+{% load static %}
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+  <title>Sign Up</title>
+</head>
+<body>
+<button class="button2" onclick="location.href = '/'">Return to Main Menu</button><br>
+  <h2>Sign Up to Receive Aid</h2>
+
+  <form id="signupForm" method="POST">{% csrf_token %}
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" required>
+    <br><br>
+    <label for="surname">Surname:</label>
+    <input type="text" id="surname" name="surname" required>
+    <br><br>
+    <label for="phone_number">Phone Number:</label>
+    <input type="tel" id="phone_number" name="phone_number" required>
+    <br><br>
+    <label for="districtId">District ID:</label>
+    <input type="number" id="districtId" name="districtID" required>
+    <br><br>
+    <label for="address">Address:</label>
+    <textarea id="address" rows="4" cols="50" name="address" required></textarea>
+    <br><br>
+    <button type="submit"><h11>Sign Up</h11></button>
+  </form> <br>
+  {% if clicked %}
+<h11>{{message}}</h11><br>
+<button class="button1" onclick="location.href = '/'"><h11>Back to Main Menu</h11></button>
+  {% endif %}
+</body>
+</html>

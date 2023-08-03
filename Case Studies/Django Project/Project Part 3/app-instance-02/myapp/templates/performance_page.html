@@ -1,0 +1,45 @@
+{% load static %}
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+  <title>Performance Measure - Number of Requests</title>
+</head>
+<body>
+<button class="button2" onclick="location.href = '/'">Return to Main Menu</button><br>
+  <h10>Number of Requests per District</h10> <br>
+  <form id="requestForm" method="POST">{% csrf_token %}
+    <label for="district">District:</label>
+    <select id="district" name="district_id">
+      {% for id,name in districts.items %}
+      <option value="{{id}}">{{name}}</option>
+      {% endfor %}
+    </select>
+    <button class="button2" type="submit"><h11>View Data</h11></button>
+  </form>
+{% if chosen_district != 0 %}
+<h11>District ID: {{chosen_district.id}}</h11><br>
+<h11>District Name: {{chosen_district.Name}}</h11><br>
+<h11>District Coordination: ({{chosen_district.Coordination.0}}, {{chosen_district.Coordination.1}})</h11><br>
+<h11>District Population: {{chosen_district.Population}}</h11><br>
+<h11>___________________________________</h11><br>
+<img src="{% static 'district_pie.png' %}" alt="pie_chart" width="300">
+{% endif %}
+<hr>
+  <h10>Number of Requests per Logistics Company</h10>
+  <form method="POST">{% csrf_token %}
+    <select name="company">
+      {% for id, name in companies.items %}
+      <option value="{{id}}">{{name}}</option>
+      {% endfor %}
+    </select>
+    <button class="button2" type="submit"><h11>View</h11></button>
+  </form>
+  {%if chosen_company != 0 %}
+<h11>Company ID: {{chosen_company.id}}</h11><br>
+<h11>Company Name: {{chosen_company.name}}</h11><br>
+<h11>Company Phone Number: {{chosen_company.number}}</h11><br>
+<h11>___________________________________</h11><br>
+<img src="{% static 'company_pie.png'%}" alt="pie_chart" width = 600>
+  {% endif %}
+</body>
+</html>

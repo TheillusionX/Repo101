@@ -1,0 +1,28 @@
+{% load static %}
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+  <title>Inventory Module</title>
+</head>
+<body>
+<button class="button2" onclick="location.href = '/'">Return to Main Menu</button><br>
+  <h1>Inventory Module</h1>
+  <h2>Current Inventory</h2>
+  <form method="POST">{% csrf_token %}
+    <button class="rbutton" name="update_table" type="submit">Update Table</button></form>
+  <table id="inventoryTable" class="table1">
+    <tr>
+      <th class="th1">Item ID/Name</th>
+      <th class="th1">Item Category</th>
+      <th class="th1">Item Quantity</th>
+    </tr>
+    {% for id, item in inventory.items %}
+    <tr>
+      <td class="th1">{{ item.Name }}</td>
+      <td class="th1">{{ item.Category }}</td>
+      <td class="th1">{{ item.Amount }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+</body>
+</html>

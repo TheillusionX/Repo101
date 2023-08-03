@@ -1,0 +1,27 @@
+{% load static %}
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+<title>Main Page</title>
+</head>
+<body>
+<header class="header1"><h10>Welcome to S.O.S.!</h10></header> <br>
+{% if not signed_in %}
+<button class="button1" onclick="location.href = '/sign_up'"><h11>Sign Up</h11></button> <br>
+<button class="button1" onclick="location.href = '/log_in'"><h11>Log In</h11></button> <br>
+{% endif %}
+{% if signed_in %}
+<h11>Signed in as: {{user.name}} {{user.surname}}</h11><br>
+<button class="button1" onclick="location.href = '/request'"><h11>Request Aid</h11></button> <br>
+<button class="button1" onclick="location.href = '/inventory'"><h11>Inventory</h11></button> <br>
+<button class="button1" onclick="location.href = '/performance'"><h11>Performance Measuring</h11></button>
+<form method="POST">{% csrf_token %}
+    <button class="button1" type="submit" name="log_out"><h11>Log Out</h11></button> </form>
+{% else %}
+<h11>Please sign up or log in to access our services.</h11>
+{% endif %}
+<form method="POST">{% csrf_token %}
+    <button type = "submit" name="test">Test</button>
+</form>
+</body>
+</html>

@@ -1,0 +1,53 @@
+{% load static %}
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+<title>Main Page</title>
+</head>
+<body>
+<button class="button2" onclick="location.href = '/'">Return to Main Menu</button><br>
+<h10>Requesting Donations</h10><br>
+<h11>Fill the form in order to request a donation</h11>
+<div class="div1">
+    <div class="div2">Name:   {{user.name}}</div>
+    <div class="div2">Surname: {{user.surname}}</div>
+</div>
+   <label for="categories">Choose the item category that you would like to request from:</label><br>
+   <form method="post" id="categories">{% csrf_token %}
+   <select name="categories">
+      <option value="">--Choose Category--</option>
+      <option value="Money">Money</option>
+      <option value="Food/Consumables">Food/Consumables</option>
+      <option value="Shelter">Shelter</option>
+      <option value="Hygienic and Self-care Products">Hygienic and Self-care Products</option>
+      <option value="Clothing/Wearables">Clothing/Wearables</option>
+      <option value="Medical Supplies">Medical Supplies</option>
+   </select><button class="select" type="submit">List Items</button><br></form>
+<form method="post">{% csrf_token %}
+<select name="items" id="items">
+       {% for i in items_in_category %}
+       <option value={{i}}>{{i}}</option>
+       {% endfor %}
+   </select>
+   <input type=number placeholder="Enter Quantity" name="quantity"><br>
+        <button class="button2" type="submit" name="add_item"><h11>Add item</h11></button>
+</form>
+   <table class="table1">
+       <tr>
+           <th class="th1">Item Requested</th>
+           <th class="th1">Quantity</th>
+       </tr>
+      {% for i, j in request_list.items %}
+      <tr>
+          <td class="th1">{{i}}</td>
+          <td class="th1">{% if i != 'No items as of now' %}{{j}}{% endif %}</td>
+      </tr>
+       {% endfor %}
+   </table>
+   <br>
+<form method="POST">{% csrf_token %}
+    <button class="button1" type="submit" name="submit_request"><h11>Submit Request</h11></button>
+</form>
+<h11>{{request_received_message}}</h11>
+</body>
+</html>
